@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: env-inspector
-  tag: 27
+  tag: 28
   pullPolicy: IfNotPresent
 
 service:
