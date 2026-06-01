@@ -84,7 +84,7 @@ pipeline {
                     git diff --cached --quiet || \
                     git commit -m "Update image tag ${BUILD_NUMBER}"
 
-                    git push origin main
+                    git push origin HEAD:main
                 '''
             }
         }
