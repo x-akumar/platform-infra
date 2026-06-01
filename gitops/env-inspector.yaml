@@ -9,7 +9,7 @@ spec:
   project: default
 
   source:
-    repoURL: git@github.com:x-akumar/platform-infra.git
+    repoURL: https://github.com/x-akumar/platform-infra.git
     targetRevision: main
     path: app/helm/env-inspector
 
