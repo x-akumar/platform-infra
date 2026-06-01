@@ -72,6 +72,22 @@ pipeline {
                 '''
             }
         }
+
+        stage('Commit Helm Changes') {
+            steps {
+                sh '''
+                    git config user.email "jenkins@ci"
+                    git config user.name "Jenkins"
+
+                    git add app/helm/env-inspector/values.yaml
+
+                    git diff --cached --quiet || \
+                    git commit -m "Update image tag ${BUILD_NUMBER}"
+
+                    git push origin main
+                '''
+            }
+        }
     }
 
     post {
