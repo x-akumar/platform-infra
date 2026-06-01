@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: 506910001786.dkr.ecr.us-east-1.amazonaws.com/env-inspector
-  tag: "40"
+  tag: 41
 
 service:
   type: ClusterIP
