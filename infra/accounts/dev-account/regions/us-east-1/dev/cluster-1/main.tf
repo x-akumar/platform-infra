@@ -70,3 +70,9 @@ module "platform" {
   aws_lbc_role_arn            = module.irsa.aws_lbc_role_arn
   cluster_autoscaler_role_arn = module.irsa.cluster_autoscaler_role_arn
 }
+
+module "ecr" {
+  source = "../../../../../../../modules/ecr"
+
+  repository_name = var.repository_name
+}

@@ -1,0 +1,38 @@
+replicaCount: 2
+
+image:
+  repository: env-inspector
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  className: alb
+
+config:
+  APP_NAME: env-inspector
+  APP_ENV: dev
+  AWS_REGION: us-east-1
+
+serviceAccount:
+  roleArn: ""
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+  limits:
+    cpu: 500m
+    memory: 512Mi

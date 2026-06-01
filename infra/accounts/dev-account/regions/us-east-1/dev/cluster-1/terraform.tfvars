@@ -57,3 +57,5 @@ vpc_cni_version    = "v1.21.1-eksbuild.8"
 
 
 aws_region = "us-east-1"
+
+repository_name = "env-inspector"

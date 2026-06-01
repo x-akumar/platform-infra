@@ -73,3 +73,7 @@ variable "vpc_cni_version" {
 variable "aws_region" {
   type = string
 }
+
+variable "repository_name" {
+  type = string
+}
