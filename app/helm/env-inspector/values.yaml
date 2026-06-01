@@ -1,9 +1,8 @@
 replicaCount: 2
 
 image:
-  repository: env-inspector
-  tag: 40
-  pullPolicy: IfNotPresent
+  repository: 506910001786.dkr.ecr.us-east-1.amazonaws.com/env-inspector
+  tag: "40"
 
 service:
   type: ClusterIP
