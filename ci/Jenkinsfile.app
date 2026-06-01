@@ -82,7 +82,9 @@ pipeline {
                     git add app/helm/env-inspector/values.yaml
 
                     git diff --cached --quiet || \
-                    git commit -m "Update image tag ${BUILD_NUMBER}"
+                    git commit -m "[skip ci] Update image tag ${BUILD_NUMBER}"
+
+                    git pull --rebase origin main
 
                     git push origin HEAD:main
                 '''
