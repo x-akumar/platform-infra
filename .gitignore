@@ -17,3 +17,9 @@ __pycache__/
 
 # Logs
 crash.log
+
+argocd-github
+
+argocd-github.pubargocd-github
+argocd-github.pub
+repo-secret.yaml
