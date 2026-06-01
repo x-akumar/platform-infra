@@ -1,0 +1,117 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(
+            name: 'CLUSTER',
+            choices: ['cluster-1'],
+            description: 'Select cluster'
+        )
+
+        choice(
+            name: 'ACTION',
+            choices: ['plan', 'apply'],
+            description: 'Terraform action'
+        )
+    }
+
+    environment {
+        TF_DIR = "infra/accounts/dev-account/regions/us-east-1/dev/${params.CLUSTER}"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                dir("${TF_DIR}") {
+                    sh 'terraform init'
+                }
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                dir("${TF_DIR}") {
+                    sh 'terraform validate'
+                }
+            }
+        }
+
+        stage('tfsec Scan') {
+            steps {
+                dir("${TF_DIR}") {
+                    sh 'tfsec .'
+                }
+            }
+        }
+
+        stage('Checkov Scan') {
+            steps {
+                dir("${TF_DIR}") {
+                    sh 'checkov -d .'
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            when {
+                anyOf {
+                    expression { params.ACTION == 'plan' }
+                    expression { params.ACTION == 'apply' }
+                }
+            }
+
+            steps {
+                dir("${TF_DIR}") {
+                    sh 'terraform plan -out=tfplan'
+                }
+            }
+        }
+
+        stage('Approval') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }
+
+            steps {
+                input(
+                    message: "Do you want to apply Terraform changes for ${params.CLUSTER}?",
+                    ok: "Apply"
+                )
+            }
+        }
+
+        stage('Terraform Apply') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }
+
+            steps {
+                dir("${TF_DIR}") {
+                    sh 'terraform apply -auto-approve tfplan'
+                }
+            }
+        }
+    }
+
+    post {
+
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+
+        failure {
+            echo 'Pipeline failed.'
+        }
+
+        always {
+            cleanWs()
+        }
+    }
+}
